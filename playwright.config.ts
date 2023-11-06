@@ -28,12 +28,13 @@ export default defineConfig({
   reporter: "html",
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
+    // headless: false,
     httpCredentials: {
       username: "guest",
       password: "welcome2qauto",
     },
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: "http://127.0.0.1:3000",
+    baseURL: "https://qauto.forstudy.space",
     viewport: {
       width: 1200,
       height: 840,
@@ -45,11 +46,6 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
-    {
-      name: "setup",
-      testMatch: "**/setup/**/*.setup.ts",
-    },
-
     {
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
