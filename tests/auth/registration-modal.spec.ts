@@ -1,4 +1,4 @@
-import { Locator, Page, expect, test } from "@playwright/test";
+import { Page, expect, test } from "@playwright/test";
 
 // ==========================================================================
 test.describe("Sign up modal", () => {
@@ -37,14 +37,6 @@ test.describe("Sign up modal", () => {
     const passwordInputPath = "input#signupPassword";
     const repeatPasswordInputPath = "input#signupRepeatPassword";
     // -------------------------------------------------------------------------
-    const changingBorderColor = () =>
-      new Promise((resolve) => {
-        setTimeout(() => resolve(void 0), 200);
-      });
-    const getBorderColor = (locator: Locator) =>
-      locator.evaluate((e) => {
-        return window.getComputedStyle(e).getPropertyValue("border-color");
-      });
     const testInput = async ({
       page,
       inputPath,
@@ -60,14 +52,12 @@ test.describe("Sign up modal", () => {
 
       await input.fill(inputText);
       await input.blur();
-      await changingBorderColor();
 
       const errorMessage = page.locator(errorMessagePath);
-      const inputBorderColor = await getBorderColor(input);
 
+      await expect(input).toHaveCSS("border-color", redColor);
       await expect(errorMessage).toBeVisible();
       await expect(errorMessage).toHaveText(errorText);
-      expect(inputBorderColor).toBe(redColor);
     };
     // -------------------------------------------------------------------------
     test.beforeEach(async ({ page }) => {
@@ -150,7 +140,6 @@ test.describe("Sign up modal", () => {
 
         await nameInput.fill("2");
         await nameInput.blur();
-        await changingBorderColor();
 
         const errorMessage = page.locator(
           "div.invalid-feedback > p:nth-child(1)"
@@ -158,15 +147,14 @@ test.describe("Sign up modal", () => {
         const errorMessage2 = page.locator(
           "div.invalid-feedback > p:nth-child(2)"
         );
-        const inputBorderColor = await getBorderColor(nameInput);
 
+        await expect(nameInput).toHaveCSS("border-color", redColor);
         await expect(errorMessage).toBeVisible();
         await expect(errorMessage).toHaveText("Name is invalid");
         await expect(errorMessage2).toBeVisible();
         await expect(errorMessage2).toHaveText(
           "Name has to be from 2 to 20 characters long"
         );
-        expect(inputBorderColor).toBe(redColor);
       });
     });
 
@@ -236,7 +224,6 @@ test.describe("Sign up modal", () => {
 
         await nameInput.fill("2");
         await nameInput.blur();
-        await changingBorderColor();
 
         const errorMessage = page.locator(
           "div.invalid-feedback > p:nth-child(1)"
@@ -244,15 +231,14 @@ test.describe("Sign up modal", () => {
         const errorMessage2 = page.locator(
           "div.invalid-feedback > p:nth-child(2)"
         );
-        const inputBorderColor = await getBorderColor(nameInput);
 
+        await expect(nameInput).toHaveCSS("border-color", redColor);
         await expect(errorMessage).toBeVisible();
         await expect(errorMessage).toHaveText("Last name is invalid");
         await expect(errorMessage2).toBeVisible();
         await expect(errorMessage2).toHaveText(
           "Last name has to be from 2 to 20 characters long"
         );
-        expect(inputBorderColor).toBe(redColor);
       });
     });
 
