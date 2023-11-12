@@ -1,8 +1,8 @@
 import { BaseComponent, Header } from "../components";
 import { Locator, Page, expect } from "@playwright/test";
 
-export default class BasePage extends BaseComponent {
-  private readonly header: Header;
+export class BasePage extends BaseComponent {
+  protected readonly header: Header;
 
   constructor(page: Page, private readonly url: string, container: Locator) {
     const wrapper = container ?? page.locator("html");

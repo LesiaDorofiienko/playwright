@@ -3,7 +3,7 @@ import { Locator, Page, expect } from "@playwright/test";
 
 export class Header extends BaseComponent {
   private readonly headerLinkSelector = ".header-link";
-  private readonly guestLoginButton: Locator;
+  readonly guestLoginButton: Locator;
 
   constructor(page: Page) {
     super(page, page.locator("app-header"));

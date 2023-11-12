@@ -1,13 +1,21 @@
 import { test } from "@playwright/test";
 
-import { RegistrationModal } from "../../src/page-objects";
+import { WelcomePage } from "../../src/page-objects/welcome-page/welcome-page";
+import { RegistrationModal } from "../../src/page-objects/welcome-page/components";
 
 test.describe("Registration modal POM", () => {
+  let welcomePage: WelcomePage;
   let registrationModal: RegistrationModal;
 
-  test.beforeEach(async ({ page }) => {
-    registrationModal = new RegistrationModal(page);
-    await registrationModal.navigate();
+  test.beforeAll(async ({ browser }) => {
+    const ctx = await browser.newContext();
+    const page = await ctx.newPage();
+    welcomePage = new WelcomePage(page);
+  });
+
+  test.beforeEach(async () => {
+    await welcomePage.navigate();
+    registrationModal = await welcomePage.openRegistrationModal();
   });
 
   test.describe("Name input", () => {
@@ -16,30 +24,42 @@ test.describe("Registration modal POM", () => {
     const lengthErrorText = "Name has to be from 2 to 20 characters long";
 
     test("Should show error when input is empty", async () => {
-      await registrationModal.nameInputValidation({
+      const input = registrationModal.nameInput;
+
+      await registrationModal.fillAndBlurInput({ input, text: "" });
+      await registrationModal.validateInput({
+        input,
         errorText: requiredErrorText,
-        inputText: "",
       });
     });
 
     test("Should show error when name is invalid", async () => {
-      await registrationModal.nameInputValidation({
+      const input = registrationModal.nameInput;
+
+      await registrationModal.fillAndBlurInput({ input, text: "tyty6" });
+      await registrationModal.validateInput({
+        input,
         errorText: invalidErrorText,
-        inputText: "tyty6",
       });
     });
 
     test("Should show error when name is too short", async () => {
-      await registrationModal.nameInputValidation({
+      const input = registrationModal.nameInput;
+
+      await registrationModal.fillAndBlurInput({ input, text: "t" });
+      await registrationModal.validateInput({
+        input,
         errorText: lengthErrorText,
-        inputText: "t",
       });
     });
 
     test("Should show error when name is too long", async () => {
-      await registrationModal.nameInputValidation({
+      const input = registrationModal.nameInput;
+
+      await registrationModal.fillAndBlurInput({ input, text: "t".repeat(21) });
+      await registrationModal.validateInput({
+        input,
         errorText: lengthErrorText,
-        inputText: "t".repeat(21),
       });
     });
   });
@@ -51,30 +71,42 @@ test.describe("Registration modal POM", () => {
     const lengthErrorText = "Last name has to be from 2 to 20 characters long";
 
     test("Should show error when input Last Name is empty", async () => {
-      await registrationModal.lastNameInputValidation({
+      const input = registrationModal.lastNameInput;
+
+      await registrationModal.fillAndBlurInput({ input, text: "" });
+      await registrationModal.validateInput({
+        input,
         errorText: requiredErrorText,
-        inputText: "",
       });
     });
 
     test("Should show error when Last Name is invalid", async () => {
-      await registrationModal.lastNameInputValidation({
+      const input = registrationModal.lastNameInput;
+
+      await registrationModal.fillAndBlurInput({ input, text: "tyty6" });
+      await registrationModal.validateInput({
+        input,
         errorText: invalidErrorText,
-        inputText: "tyty6",
       });
     });
 
     test("Should show error when Last Name is too short", async () => {
-      await registrationModal.lastNameInputValidation({
+      const input = registrationModal.lastNameInput;
+
+      await registrationModal.fillAndBlurInput({ input, text: "t" });
+      await registrationModal.validateInput({
+        input,
         errorText: lengthErrorText,
-        inputText: "t",
       });
     });
 
     test("Should show error when Last name is too long", async () => {
-      await registrationModal.lastNameInputValidation({
+      const input = registrationModal.lastNameInput;
+
+      await registrationModal.fillAndBlurInput({ input, text: "t".repeat(21) });
+      await registrationModal.validateInput({
+        input,
         errorText: lengthErrorText,
-        inputText: "t".repeat(22),
       });
     });
   });
@@ -85,16 +117,22 @@ test.describe("Registration modal POM", () => {
     const invalidErrorText = "Email is incorrect";
 
     test("Should show error when input Email is empty", async () => {
-      await registrationModal.emailInputValidation({
+      const input = registrationModal.emailInput;
+
+      await registrationModal.fillAndBlurInput({ input, text: "" });
+      await registrationModal.validateInput({
+        input,
         errorText: requiredErrorText,
-        inputText: "",
       });
     });
 
     test("Should show error when Email is incorrect", async () => {
-      await registrationModal.emailInputValidation({
+      const input = registrationModal.emailInput;
+
+      await registrationModal.fillAndBlurInput({ input, text: "tyty6" });
+      await registrationModal.validateInput({
+        input,
         errorText: invalidErrorText,
-        inputText: "rr",
       });
     });
   });
@@ -106,30 +144,42 @@ test.describe("Registration modal POM", () => {
       "Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter";
 
     test("Should show error when input Password is empty", async () => {
-      await registrationModal.passwordInputValidation({
+      const input = registrationModal.passwordInput;
+
+      await registrationModal.fillAndBlurInput({ input, text: "" });
+      await registrationModal.validateInput({
+        input,
         errorText: requiredError,
-        inputText: "",
       });
     });
 
     test("Should show error when Password is incorect", async () => {
-      await registrationModal.passwordInputValidation({
+      const input = registrationModal.passwordInput;
+
+      await registrationModal.fillAndBlurInput({ input, text: "tyty6" });
+      await registrationModal.validateInput({
+        input,
         errorText: incorrectError,
-        inputText: "rr",
       });
     });
 
     test("Should show error when Password is too short", async () => {
-      await registrationModal.passwordInputValidation({
+      const input = registrationModal.passwordInput;
+
+      await registrationModal.fillAndBlurInput({ input, text: "t" });
+      await registrationModal.validateInput({
+        input,
         errorText: incorrectError,
-        inputText: "n",
       });
     });
 
     test("Should show error when Password is too long", async () => {
-      await registrationModal.passwordInputValidation({
+      const input = registrationModal.passwordInput;
+
+      await registrationModal.fillAndBlurInput({ input, text: "t".repeat(22) });
+      await registrationModal.validateInput({
+        input,
         errorText: incorrectError,
-        inputText: "n".repeat(16),
       });
     });
   });
@@ -142,33 +192,49 @@ test.describe("Registration modal POM", () => {
     const requiredReEnterPasswordError = "Re-enter password required";
 
     test("Should show error when Re-enter password is empty", async () => {
-      await registrationModal.repeatPasswordInputValidation({
+      const input = registrationModal.repeatPasswordInput;
+
+      await registrationModal.fillAndBlurInput({ input, text: "" });
+      await registrationModal.validateInput({
+        input,
         errorText: requiredReEnterPasswordError,
-        inputText: "",
       });
     });
 
     test("Should show error when Re-enter password is incorrect", async () => {
-      await registrationModal.repeatPasswordInputValidation({
+      const input = registrationModal.repeatPasswordInput;
+
+      await registrationModal.fillAndBlurInput({ input, text: "tyty6" });
+      await registrationModal.validateInput({
+        input,
         errorText: incorrectError,
-        inputText: "rr",
       });
     });
 
     test("Should show error when Re-enter passwords don't match", async () => {
-      await registrationModal.repeatPasswordInputValidation({
+      const input = registrationModal.repeatPasswordInput;
+
+      await registrationModal.fillAndBlurInput({ input, text: "nQWErtyw#4" });
+      await registrationModal.validateInput({
+        input,
         errorText: notMatchErrorText,
-        inputText: "nQWErtyw#4",
       });
     });
   });
 
-  test("Successfully registration ", async () => {
-    const name = "Lesia";
-    const lastName = "Doroffienko";
-    const email = "aqa-lesiad656@test.com";
-    const password = "YourName123";
+  test.describe("Successfull registration", () => {
+    test("Should register new user", async () => {
+      const name = "Lesia";
+      const lastName = "Doroffienko";
+      const email = "aqa-lesiad65694@test.com";
+      const password = "YourName123";
 
-    await registrationModal.registrate({ name, lastName, email, password });
+      await registrationModal.registerNewUser({
+        name,
+        lastName,
+        email,
+        password,
+      });
+    });
   });
 });
