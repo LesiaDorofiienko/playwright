@@ -10,6 +10,8 @@ export default defineConfig({
   testMatch: "tests/**/*.spec.ts",
   globalSetup: "./global-setup",
   globalTeardown: "./global-teardown",
+  timeout: 30 * 1000,
+  grep: /@smoke/,
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
