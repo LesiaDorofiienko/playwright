@@ -1,7 +1,7 @@
 import { Page, expect, test } from "@playwright/test";
 
 // ==========================================================================
-test.describe.skip("Sign up modal", () => {
+test.describe("Sign up modal @regression", () => {
   // -------------------------------------------------------------------------
   test("Sign up modal visible", async ({ page }) => {
     await page.goto("/");
