@@ -8,7 +8,7 @@ export type Fixtures = {
   user: User;
   userProfilePage: ProfilePage;
   managerProfilePage: ProfilePage;
-  garagePage: GaragePage;
+  userGaragePage: GaragePage;
 };
 
 export const test = base.extend<Fixtures>({
@@ -38,7 +38,7 @@ export const test = base.extend<Fixtures>({
     //after test
   },
 
-  garagePage: async ({ browser }, use) => {
+  userGaragePage: async ({ browser }, use) => {
     const ctx = await browser.newContext({
       storageState: STORAGE_STATE_USER_PATH,
     });
