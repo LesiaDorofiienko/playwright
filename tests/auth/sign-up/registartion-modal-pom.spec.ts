@@ -1,7 +1,7 @@
 import { test } from "@playwright/test";
 
-import { WelcomePage } from "../../src/page-objects/welcome-page/welcome-page";
-import { RegistrationModal } from "../../src/page-objects/welcome-page/components";
+import { WelcomePage } from "../../../src/page-objects/welcome-page/welcome-page";
+import { RegistrationModal } from "../../../src/page-objects/welcome-page/components";
 
 test.describe("Registration modal POM", () => {
   let welcomePage: WelcomePage;

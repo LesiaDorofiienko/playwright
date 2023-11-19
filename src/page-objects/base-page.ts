@@ -2,7 +2,7 @@ import { BaseComponent, Header } from "../components";
 import { Locator, Page, expect } from "@playwright/test";
 
 export class BasePage extends BaseComponent {
-  protected readonly header: Header;
+  readonly header: Header;
 
   constructor(page: Page, private readonly url: string, container: Locator) {
     const wrapper = container ?? page.locator("html");
