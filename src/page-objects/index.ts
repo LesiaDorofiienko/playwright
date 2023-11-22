@@ -1,1 +1,3 @@
-export * from "./registration-modal";
+export * from "./panel";
+export * from "./profile-page";
+export * from "./welcome-page";

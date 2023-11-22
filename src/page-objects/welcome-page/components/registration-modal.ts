@@ -17,15 +17,15 @@ export class RegistrationModal extends BaseComponent {
   private readonly passwordInputSelector = "input#signupPassword";
   private readonly repeatPasswordInputSelector = "input#signupRepeatPassword";
 
-  nameInput: Locator;
-  lastNameInput: Locator;
-  emailInput: Locator;
-  passwordInput: Locator;
-  repeatPasswordInput: Locator;
+  readonly nameInput: Locator;
+  readonly lastNameInput: Locator;
+  readonly emailInput: Locator;
+  readonly passwordInput: Locator;
+  readonly repeatPasswordInput: Locator;
 
-  registerButton: Locator;
+  readonly registerButton: Locator;
 
-  errorMessage: Locator;
+  readonly errorMessage: Locator;
 
   constructor(page: Page) {
     super(page, page.locator("app-signup-modal"));
