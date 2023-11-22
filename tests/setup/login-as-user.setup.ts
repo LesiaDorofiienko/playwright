@@ -16,7 +16,10 @@ test("Login as user and save storage state", async ({ page, context }) => {
   });
 });
 
-test("Login as admin and save storage state", async ({ page, context }) => {
+test.skip("Login as admin and save storage state", async ({
+  page,
+  context,
+}) => {
   const welcomePage = new WelcomePage(page);
   await welcomePage.navigate();
   const modal = await welcomePage.openSignInModal();

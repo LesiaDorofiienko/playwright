@@ -13,7 +13,6 @@ export class WelcomePage extends BasePage {
       hasText: "Sign up",
     });
     this.signInButton = page.locator(".header_signin");
-    this.signInButton = page.locator(".header_signin");
   }
 
   async openRegistrationModal() {

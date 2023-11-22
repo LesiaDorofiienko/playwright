@@ -1,4 +1,4 @@
-import { test as base } from "@playwright/test";
+import { Page, test as base } from "@playwright/test";
 import { GaragePage, ProfilePage, WelcomePage } from "../page-objects";
 import { USERS, User } from "../data/dict";
 import { STORAGE_STATE_USER_PATH } from "../data/storage-state";
@@ -9,12 +9,13 @@ export type Fixtures = {
   userProfilePage: ProfilePage;
   managerProfilePage: ProfilePage;
   userGaragePage: GaragePage;
+  pageWithAuth: Page;
 };
 
 export const test = base.extend<Fixtures>({
   headerLinks: ["Garage", "Fuel expenses", "Instructions"],
   user: USERS.lesia,
-  page: async ({ browser }, use) => {
+  pageWithAuth: async ({ browser }, use) => {
     const ctx = await browser.newContext({
       storageState: STORAGE_STATE_USER_PATH,
     });

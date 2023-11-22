@@ -6,14 +6,14 @@ test.describe("User profile", () => {
   test.only("page should contain valid user info", async ({
     userProfilePage,
     user,
-    page,
+    pageWithAuth,
   }) => {
     await expect(
       userProfilePage.userName,
       "valid user name should be displayed"
     ).toHaveText(`${user.name} ${user.lastName}`);
 
-    const gp = new GaragePage(page);
+    const gp = new GaragePage(pageWithAuth);
     await gp.navigate();
   });
 
