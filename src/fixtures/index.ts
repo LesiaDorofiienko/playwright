@@ -37,7 +37,6 @@ export const test = base.extend<Fixtures>({
     const page = await ctx.newPage();
     const profilePage = new ProfilePage(page);
     await profilePage.navigate();
-    console.log("test");
     // before test
 
     await use(profilePage);

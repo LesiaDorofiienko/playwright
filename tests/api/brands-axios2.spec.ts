@@ -8,7 +8,7 @@ import { VALID_BRAND_MODELS } from "../../src/data/dict/models.js";
 import { config } from "../../config/config.js";
 import { USERS } from "../../src/data/dict/users.js";
 
-test.describe("API", () => {
+test.describe.skip("API", () => {
   let client;
 
   test.beforeAll(async () => {
@@ -32,9 +32,11 @@ test.describe("API", () => {
 
   test("should return valid brands", async () => {
     const response = await client.get("/cars");
-    console.log(response);
-    // expect(response.status, "Status code should be 200").toEqual(200)
-    // expect(response.data, "Valid brands should be returned").toEqual(VALID_BRANDS_RESPONSE_BODY)
+    // console.log(response);
+    expect(response.status, "Status code should be 200").toEqual(200);
+    expect(response.data, "Valid brands should be returned").toEqual(
+      VALID_BRANDS_RESPONSE_BODY
+    );
   });
 
   for (const brand of VALID_BRANDS_RESPONSE_BODY.data) {

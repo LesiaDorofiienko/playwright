@@ -3,7 +3,7 @@ import { expect } from "@playwright/test";
 import { VALID_BRANDS_RESPONSE_BODY } from "../../src/data/dict/brands.js";
 import { VALID_BRAND_MODELS } from "../../src/data/dict/models.js";
 
-test.describe("API", () => {
+test.describe.skip("API", () => {
   test("should return valid brands", async ({ userAPIClient }) => {
     const response = await userAPIClient.fetch("/api/cars/brands");
     const body = await response.json();

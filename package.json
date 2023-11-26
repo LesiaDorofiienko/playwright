@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test",
-    "test:api": "npx playwright test -c playwright.config.api.js",
+    "test:api": "npx playwright test -c playwright.config.api.ts",
     "test:smoke": "npx playwright test -c playwright.config.smoke.ts",
     "test:regression": "npx playwright test -c playwright.config.regression.ts",
     "test:ui": "npx playwright test --ui",

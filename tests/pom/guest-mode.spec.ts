@@ -33,7 +33,6 @@ test.describe("Guest mode @S09791ac6", () => {
   test("should contain all required links in header @Td447a475", async ({
     headerLinks,
   }) => {
-    console.log(headerLinks);
     const linksText = await garagePage.header.getLinksText();
 
     expect(linksText, "All required links should be present").toEqual(

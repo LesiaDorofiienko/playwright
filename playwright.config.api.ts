@@ -1,5 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
-import { config as testConfig } from "./config/config.js";
+import { config } from "./config";
 
 /**
  * Read environment variables from file.
@@ -13,9 +13,9 @@ import { config as testConfig } from "./config/config.js";
 
 export default defineConfig({
   // testDir: './tests',
-  testMatch: "tests/**/*.spec.js",
-  globalSetup: "./globalSetup",
-  globalTeardown: "./globalTeardown",
+  testMatch: "tests/**/*.spec.ts",
+  globalSetup: "./global-setup",
+  globalTeardown: "./global-teardown",
   // grep: /@smoke/,
   timeout: 360_000,
   /* Run tests in files in parallel */
@@ -49,9 +49,9 @@ export default defineConfig({
   use: {
     headless: true,
     // storageState: STORAGE_STATE_USER_PATH,
-    httpCredentials: testConfig.httpCredentials,
+    httpCredentials: config.httpCredentials,
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: testConfig.baseURL,
+    baseURL: config.baseURL,
     viewport: {
       width: 1200,
       height: 840,
@@ -70,7 +70,7 @@ export default defineConfig({
     {
       name: "api tests",
       use: { ...devices["Desktop Chrome"] },
-      testMatch: "tests/api/**/*.spec.js",
+      testMatch: "tests/api/**/*.spec.ts",
     },
     //
     // {

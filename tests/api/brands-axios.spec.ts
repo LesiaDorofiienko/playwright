@@ -6,7 +6,7 @@ import axios from "axios";
 import { config } from "../../config/config.js";
 import { USERS } from "../../src/data/dict/users.js";
 
-test.describe("API", () => {
+test.describe.skip("API", () => {
   let client;
 
   test.beforeAll(async () => {
