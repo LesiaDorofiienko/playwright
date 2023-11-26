@@ -17,11 +17,11 @@ test.describe("User profile", () => {
     await gp.navigate();
   });
 
-  //   test("should use storage state", async ({ page, user }) => {
-  //     const profilePage = new ProfilePage(page);
-  //     await expect(
-  //       profilePage.userName,
-  //       "valid user name should be displayed"
-  //     ).toHaveText(`${user.name} ${user.lastName}`);
-  //   });
+  test("should use storage state", async ({ page, user }) => {
+    const profilePage = new ProfilePage(page);
+    await expect(
+      profilePage.userName,
+      "valid user name should be displayed"
+    ).toHaveText(`${user.name} ${user.lastName}`);
+  });
 });

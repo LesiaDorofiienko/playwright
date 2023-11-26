@@ -1,7 +1,12 @@
-import { Page, test as base } from "@playwright/test";
-import { GaragePage, ProfilePage, WelcomePage } from "../page-objects";
+import {
+  APIRequestContext,
+  Page,
+  test as base,
+  request,
+} from "@playwright/test";
 import { USERS, User } from "../data/dict";
 import { STORAGE_STATE_USER_PATH } from "../data/storage-state";
+import { GaragePage, ProfilePage } from "../page-objects";
 
 export type Fixtures = {
   headerLinks: string[];
@@ -10,6 +15,7 @@ export type Fixtures = {
   managerProfilePage: ProfilePage;
   userGaragePage: GaragePage;
   pageWithAuth: Page;
+  userAPIClient: APIRequestContext;
 };
 
 export const test = base.extend<Fixtures>({
@@ -49,5 +55,14 @@ export const test = base.extend<Fixtures>({
     await garagePage.navigate();
 
     await use(garagePage);
+  },
+
+  userAPIClient: async ({}, use) => {
+    const ctx = await request.newContext({
+      storageState: STORAGE_STATE_USER_PATH,
+    });
+    await use(ctx);
+
+    await ctx.dispose();
   },
 });
