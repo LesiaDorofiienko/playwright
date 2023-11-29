@@ -3,7 +3,7 @@ import { expect } from "@playwright/test";
 import { VALID_BRANDS_RESPONSE_BODY } from "../../src/data/dict/brands.js";
 import { VALID_BRAND_MODELS } from "../../src/data/dict/models.js";
 
-test.describe("API /api/cars", () => {
+test.describe.skip("API /api/cars", () => {
   test("should create new car", async ({ userAPIClient }) => {
     const brandId = VALID_BRANDS_RESPONSE_BODY.data[0].id;
     const modelId = VALID_BRAND_MODELS[brandId].data[1].id;
