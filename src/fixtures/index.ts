@@ -7,6 +7,10 @@ import {
 import { USERS, User } from "../data/dict";
 import { STORAGE_STATE_USER_PATH } from "../data/storage-state";
 import { GaragePage, ProfilePage } from "../page-objects";
+import { APIClient } from "../client";
+import { CookieJar } from "tough-cookie";
+import { config } from "../../config";
+import { AuthController, CarController, UserController } from "../controllers";
 
 export type Fixtures = {
   headerLinks: string[];
@@ -16,6 +20,9 @@ export type Fixtures = {
   userGaragePage: GaragePage;
   pageWithAuth: Page;
   userAPIClient: APIRequestContext;
+  client: APIClient;
+  clientWithUser: (userData: any) => Promise<APIClient>;
+  clientWithNewUser: APIClient;
 };
 
 export const test = base.extend<Fixtures>({
@@ -63,5 +70,65 @@ export const test = base.extend<Fixtures>({
     await use(ctx);
 
     await ctx.dispose();
+  },
+
+  client: async ({}, use) => {
+    const jar = new CookieJar();
+    const authController = new AuthController(config.apiURL, jar);
+
+    await authController.signIn({
+      email: USERS.lesia.email,
+      password: USERS.lesia.password,
+    });
+
+    await use({
+      cars: new CarController(config.apiURL, jar),
+      auth: authController,
+    });
+  },
+
+  clientWithUser: async ({}, use) => {
+    async function getClient(userData) {
+      const jar = new CookieJar();
+      const authController = new AuthController(config.apiURL, jar);
+
+      await authController.signIn(userData);
+
+      return {
+        cars: new CarController(config.apiURL, jar),
+        auth: authController,
+      };
+    }
+
+    await use(getClient);
+  },
+
+  clientWithNewUser: async ({}, use) => {
+    const userData = {
+      name: "John",
+      lastName: "Dou",
+      email: `test${Date.now()}@test.com`,
+      password: "Qwerty12345",
+      repeatPassword: "Qwerty12345",
+    };
+    console.log(userData.email);
+    const jar = new CookieJar();
+
+    const authController = new AuthController(config.apiURL, jar);
+    const userController = new UserController(config.apiURL, jar);
+
+    await authController.signUp(userData);
+    await authController.signIn({
+      email: userData.email,
+      password: userData.password,
+    });
+
+    await use({
+      cars: new CarController(config.apiURL, jar),
+      auth: authController,
+      users: userController,
+    });
+
+    await userController.deleteCurrentUser();
   },
 });
