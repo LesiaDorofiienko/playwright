@@ -4,9 +4,13 @@ import {
   test as base,
   request,
 } from "@playwright/test";
+import { CookieJar } from "tough-cookie";
+import { config } from "../../config";
+import { APIClient } from "../client";
 import { USERS, User } from "../data/dict";
 import { STORAGE_STATE_USER_PATH } from "../data/storage-state";
 import { GaragePage, ProfilePage } from "../page-objects";
+import { SignInData, SignUpData } from "../types";
 
 export type Fixtures = {
   headerLinks: string[];
@@ -16,6 +20,9 @@ export type Fixtures = {
   userGaragePage: GaragePage;
   pageWithAuth: Page;
   userAPIClient: APIRequestContext;
+  client: APIClient;
+  clientWithUser: (userData: any) => Promise<APIClient>;
+  clientWithNewUser: APIClient;
 };
 
 export const test = base.extend<Fixtures>({
@@ -63,5 +70,58 @@ export const test = base.extend<Fixtures>({
     await use(ctx);
 
     await ctx.dispose();
+  },
+
+  client: async ({}, use) => {
+    const apiClient = new APIClient({
+      baseUrl: config.apiURL,
+      cookie: new CookieJar(),
+    });
+
+    await apiClient.auth.signIn({
+      email: USERS.lesia.email,
+      password: USERS.lesia.password,
+    });
+
+    await use(apiClient);
+  },
+
+  clientWithUser: async ({}, use) => {
+    async function getClient(userData: SignInData) {
+      const apiClient = new APIClient({
+        baseUrl: config.apiURL,
+        cookie: new CookieJar(),
+      });
+
+      await apiClient.auth.signIn(userData);
+
+      return apiClient;
+    }
+
+    await use(getClient);
+  },
+
+  clientWithNewUser: async ({}, use) => {
+    const data: SignUpData = {
+      name: "John",
+      lastName: "Dou",
+      email: `test${Date.now()}@test.com`,
+      password: "Qwerty12345",
+    };
+
+    const apiClient = new APIClient({
+      baseUrl: config.apiURL,
+      cookie: new CookieJar(),
+    });
+
+    await apiClient.auth.signUp(data);
+    await apiClient.auth.signIn({
+      email: data.email,
+      password: data.password,
+    });
+
+    await use(apiClient);
+
+    await apiClient.users.deleteCurrentUser();
   },
 });

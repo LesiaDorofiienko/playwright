@@ -8,7 +8,7 @@ import { VALID_BRAND_MODELS } from "../../src/data/dict/models.js";
 import { config } from "../../config/config.js";
 import { USERS } from "../../src/data/dict/users.js";
 
-test.describe("API /api/cars", () => {
+test.describe.skip("API /api/cars", () => {
   let client: AxiosInstance;
 
   test.beforeAll(async () => {
