@@ -4,13 +4,13 @@ import {
   test as base,
   request,
 } from "@playwright/test";
+import { CookieJar } from "tough-cookie";
+import { config } from "../../config";
+import { APIClient } from "../client";
 import { USERS, User } from "../data/dict";
 import { STORAGE_STATE_USER_PATH } from "../data/storage-state";
 import { GaragePage, ProfilePage } from "../page-objects";
-import { APIClient } from "../client";
-import { CookieJar } from "tough-cookie";
-import { config } from "../../config";
-import { AuthController, CarController, UserController } from "../controllers";
+import { SignInData, SignUpData } from "../types";
 
 export type Fixtures = {
   headerLinks: string[];
@@ -73,62 +73,55 @@ export const test = base.extend<Fixtures>({
   },
 
   client: async ({}, use) => {
-    const jar = new CookieJar();
-    const authController = new AuthController(config.apiURL, jar);
+    const apiClient = new APIClient({
+      baseUrl: config.apiURL,
+      cookie: new CookieJar(),
+    });
 
-    await authController.signIn({
+    await apiClient.auth.signIn({
       email: USERS.lesia.email,
       password: USERS.lesia.password,
     });
 
-    await use({
-      cars: new CarController(config.apiURL, jar),
-      auth: authController,
-    });
+    await use(apiClient);
   },
 
   clientWithUser: async ({}, use) => {
-    async function getClient(userData) {
-      const jar = new CookieJar();
-      const authController = new AuthController(config.apiURL, jar);
+    async function getClient(userData: SignInData) {
+      const apiClient = new APIClient({
+        baseUrl: config.apiURL,
+        cookie: new CookieJar(),
+      });
 
-      await authController.signIn(userData);
+      await apiClient.auth.signIn(userData);
 
-      return {
-        cars: new CarController(config.apiURL, jar),
-        auth: authController,
-      };
+      return apiClient;
     }
 
     await use(getClient);
   },
 
   clientWithNewUser: async ({}, use) => {
-    const userData = {
+    const data: SignUpData = {
       name: "John",
       lastName: "Dou",
       email: `test${Date.now()}@test.com`,
       password: "Qwerty12345",
-      repeatPassword: "Qwerty12345",
     };
-    console.log(userData.email);
-    const jar = new CookieJar();
 
-    const authController = new AuthController(config.apiURL, jar);
-    const userController = new UserController(config.apiURL, jar);
-
-    await authController.signUp(userData);
-    await authController.signIn({
-      email: userData.email,
-      password: userData.password,
+    const apiClient = new APIClient({
+      baseUrl: config.apiURL,
+      cookie: new CookieJar(),
     });
 
-    await use({
-      cars: new CarController(config.apiURL, jar),
-      auth: authController,
-      users: userController,
+    await apiClient.auth.signUp(data);
+    await apiClient.auth.signIn({
+      email: data.email,
+      password: data.password,
     });
 
-    await userController.deleteCurrentUser();
+    await use(apiClient);
+
+    await apiClient.users.deleteCurrentUser();
   },
 });

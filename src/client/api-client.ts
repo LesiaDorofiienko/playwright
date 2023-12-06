@@ -1,23 +1,28 @@
 import { AuthController, CarController, UserController } from "../controllers";
 import { CookieJar } from "tough-cookie";
 import { config } from "../../config/config.js";
+import { ControllerOptions, SignInData } from "../types";
 
 export class APIClient {
   readonly auth: AuthController;
   readonly cars: CarController;
-  readonly users?: UserController;
+  readonly users: UserController;
 
-  constructor(baseUrl: string, jar?: CookieJar) {
-    this.auth = new AuthController(baseUrl, jar);
-    this.cars = new CarController(baseUrl, jar);
+  constructor(options: ControllerOptions) {
+    this.auth = new AuthController(options);
+    this.cars = new CarController(options);
+    this.users = new UserController(options);
   }
 
-  static async authenticate(baseUrl = config.apiURL, userData) {
-    const jar = new CookieJar();
-    const authController = new AuthController(baseUrl, jar);
+  static async authenticate(
+    userData: SignInData,
+    { baseUrl = config.baseURL, cookie = new CookieJar() }: ControllerOptions
+  ) {
+    const options: ControllerOptions = { baseUrl, cookie };
+    const authController = new AuthController(options);
 
     await authController.signIn(userData);
 
-    return new APIClient(baseUrl, jar);
+    return new APIClient(options);
   }
 }

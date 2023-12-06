@@ -100,6 +100,7 @@ test.describe("API /cars", () => {
 
       expect(response.status).toEqual(200);
       expect(response.data.status).toEqual("ok");
+      expect(response.data.data).toHaveLength(1);
       expect(response.data.data[0]).toMatchObject(validCarData);
     });
 

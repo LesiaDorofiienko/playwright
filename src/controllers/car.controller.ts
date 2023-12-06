@@ -1,5 +1,6 @@
 import { CookieJar } from "tough-cookie";
 import { BaseController } from "./base.controller";
+import { ControllerOptions } from "../types";
 
 export class CarController extends BaseController {
   private readonly deleteUserCarsPath = "/cars/#";
@@ -17,8 +18,8 @@ export class CarController extends BaseController {
   private readonly updateCarBydIdPath = "/cars/{id}";
   private readonly deleteCarIdPath = "/cars/{id}";
 
-  constructor(baseUrl: string, jar?: CookieJar) {
-    super(baseUrl, jar);
+  constructor(options: ControllerOptions) {
+    super(options);
   }
 
   async createCar(carData) {
