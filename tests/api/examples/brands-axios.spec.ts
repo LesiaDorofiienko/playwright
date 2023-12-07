@@ -1,16 +1,41 @@
-import { test } from "../../src/fixtures";
+import { test } from "../../../src/fixtures";
 import { expect } from "@playwright/test";
-import { VALID_BRANDS_RESPONSE_BODY } from "../../src/data/dict/brands.js";
-import { VALID_BRAND_MODELS } from "../../src/data/dict/models.js";
+import { VALID_BRANDS_RESPONSE_BODY } from "../../../src/data/dict/brands.js";
+import { VALID_BRAND_MODELS } from "../../../src/data/dict/models.js";
+import axios from "axios";
+import { config } from "../../../config/config.js";
+import { USERS } from "../../../src/data/dict/users.js";
 
 test.describe.skip("API", () => {
-  test("should return valid brands", async ({ userAPIClient }) => {
-    const response = await userAPIClient.fetch("/api/cars/brands");
-    const body = await response.json();
+  let client;
 
-    await expect(response, "Positive response should be returned").toBeOK();
-    expect(response.status(), "Status code should be 200").toEqual(200);
-    expect(body, "Valid brands should be returned").toEqual(
+  test.beforeAll(async () => {
+    client = axios.create({
+      baseURL: config.apiURL,
+    });
+
+    const responseLogin = await client.post("/auth/signin", {
+      email: USERS.lesia.email,
+      password: USERS.lesia.password,
+      remember: false,
+    });
+
+    const cookie = responseLogin.headers["set-cookie"][0].split(";")[0];
+    client = axios.create({
+      baseURL: config.apiURL,
+      headers: {
+        cookie,
+      },
+      validateStatus: (status) => {
+        return status < 501;
+      },
+    });
+  });
+
+  test("should return valid brands", async () => {
+    const response = await client.get("/cars/brands");
+    expect(response.status, "Status code should be 200").toEqual(200);
+    expect(response.data, "Valid brands should be returned").toEqual(
       VALID_BRANDS_RESPONSE_BODY
     );
   });
@@ -33,7 +58,7 @@ test.describe.skip("API", () => {
     });
   }
 
-  test.only("should create new car", async ({ userAPIClient }) => {
+  test("should create new car", async ({ userAPIClient }) => {
     const brandId = VALID_BRANDS_RESPONSE_BODY.data[0].id;
     const modelId = VALID_BRAND_MODELS[brandId].data[1].id;
 

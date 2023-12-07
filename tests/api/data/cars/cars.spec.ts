@@ -1,10 +1,10 @@
-import { test } from "../../src/fixtures/";
+import { test } from "../../../../src/fixtures";
 import { expect } from "@playwright/test";
 import {
   VALID_BRANDS_RESPONSE_BODY,
   VALID_BRAND_MODELS,
   VALID_MODELS_RESPONSE,
-} from "../../src/data/dict";
+} from "../../../../src/data/dict";
 
 test.describe("API /cars", () => {
   test.describe("/cars/brands", () => {

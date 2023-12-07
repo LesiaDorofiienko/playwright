@@ -8,21 +8,20 @@ export class APIClient {
   readonly cars: CarController;
   readonly users: UserController;
 
-  constructor(options: ControllerOptions) {
+  constructor(options?: ControllerOptions) {
     this.auth = new AuthController(options);
     this.cars = new CarController(options);
     this.users = new UserController(options);
   }
 
-  static async authenticate(
-    userData: SignInData,
-    { baseUrl = config.baseURL, cookie = new CookieJar() }: ControllerOptions
-  ) {
-    const options: ControllerOptions = { baseUrl, cookie };
-    const authController = new AuthController(options);
+  static async authenticate(userData: SignInData, options?: ControllerOptions) {
+    const apiClient = new APIClient({
+      baseUrl: options?.baseUrl ?? config.apiURL,
+      cookie: options?.cookie ?? new CookieJar(),
+    });
 
-    await authController.signIn(userData);
+    await apiClient.auth.signIn(userData);
 
-    return new APIClient(options);
+    return apiClient;
   }
 }

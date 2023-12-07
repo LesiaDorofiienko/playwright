@@ -73,10 +73,7 @@ export const test = base.extend<Fixtures>({
   },
 
   client: async ({}, use) => {
-    const apiClient = new APIClient({
-      baseUrl: config.apiURL,
-      cookie: new CookieJar(),
-    });
+    const apiClient = new APIClient();
 
     await apiClient.auth.signIn({
       email: USERS.lesia.email,
@@ -88,10 +85,7 @@ export const test = base.extend<Fixtures>({
 
   clientWithUser: async ({}, use) => {
     async function getClient(userData: SignInData) {
-      const apiClient = new APIClient({
-        baseUrl: config.apiURL,
-        cookie: new CookieJar(),
-      });
+      const apiClient = new APIClient();
 
       await apiClient.auth.signIn(userData);
 
@@ -109,10 +103,7 @@ export const test = base.extend<Fixtures>({
       password: "Qwerty12345",
     };
 
-    const apiClient = new APIClient({
-      baseUrl: config.apiURL,
-      cookie: new CookieJar(),
-    });
+    const apiClient = new APIClient();
 
     await apiClient.auth.signUp(data);
     await apiClient.auth.signIn({

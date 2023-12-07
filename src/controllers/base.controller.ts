@@ -7,11 +7,11 @@ import { ControllerOptions } from "../types";
 export class BaseController {
   readonly client: AxiosInstance;
 
-  constructor({ baseUrl, cookie }: ControllerOptions) {
+  constructor(options?: ControllerOptions) {
     this.client = wrapper(
       axios.create({
-        baseURL: baseUrl,
-        jar: cookie,
+        baseURL: options?.baseUrl ?? config.apiURL,
+        jar: options?.cookie ?? new CookieJar(),
         validateStatus: (status) => {
           return status < 501;
         },

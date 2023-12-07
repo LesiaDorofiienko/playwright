@@ -17,3 +17,8 @@ export type SignUpData = {
   email: string;
   password: string;
 };
+export type CreateCarData = {
+  carBrandId: number;
+  carModelId: number;
+  mileage: number;
+};

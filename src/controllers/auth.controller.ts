@@ -6,7 +6,7 @@ export class AuthController extends BaseController {
   private readonly signInPath = "/auth/signin";
   private readonly signUpPath = "/auth/signup";
 
-  constructor(options: ControllerOptions) {
+  constructor(options?: ControllerOptions) {
     super(options);
   }
 
