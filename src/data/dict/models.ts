@@ -139,7 +139,7 @@ export const VALID_BRAND_MODELS = {
       },
     ],
   },
-};
+} as const;
 
 export const VALID_MODELS_RESPONSE = {
   status: "ok",

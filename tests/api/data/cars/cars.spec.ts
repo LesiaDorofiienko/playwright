@@ -5,6 +5,7 @@ import {
   VALID_BRAND_MODELS,
   VALID_MODELS_RESPONSE,
 } from "../../../../src/data/dict";
+import { CreateCarModel } from "../../../../src/models";
 
 test.describe("API /cars", () => {
   test.describe("/cars/brands", () => {
@@ -62,31 +63,39 @@ test.describe("API /cars", () => {
   });
 
   test.describe("/cars/", () => {
-    const brandId = VALID_BRANDS_RESPONSE_BODY.data[0].id;
-    const modelId = VALID_BRAND_MODELS[brandId].data[1].id;
-    const validCarData = {
-      carBrandId: brandId,
-      carModelId: modelId,
+    const brand = VALID_BRANDS_RESPONSE_BODY.data[0];
+    const model = VALID_BRAND_MODELS[brand.id].data[1];
+    const carModel = new CreateCarModel({
+      carBrandId: brand.id,
+      carModelId: model.id,
       mileage: 122,
+    });
+    const expectedBody = {
+      ...carModel,
+      initialMileage: carModel.mileage,
+      id: expect.any(Number),
+      carCreatedAt: expect.any(String),
+      updatedMileageAt: expect.any(String),
+      brand: brand.title,
+      model: model.title,
+      logo: brand.logoFilename,
     };
 
     test("should create car", async ({ clientWithNewUser }) => {
-      const response = await clientWithNewUser.cars.createCar(validCarData);
+      const response = await clientWithNewUser.cars.createCar(carModel);
 
       expect(response.status).toEqual(201);
       expect(response.data.status).toEqual("ok");
-      expect(response.data.data).toMatchObject(validCarData);
+      expect(response.data.data).toEqual(expectedBody);
     });
 
     test("should return 400 for invalid data", async ({
       clientWithNewUser,
     }) => {
-      const data = {
-        carBrandId: brandId,
-        carModelId: modelId,
-      };
-
-      const response = await clientWithNewUser.cars.createCar(data);
+      const response = await clientWithNewUser.cars.createCar({
+        ...carModel,
+        mileage: undefined,
+      });
 
       expect(response.status).toEqual(400);
       expect(response.data.status).toBe("error");
@@ -94,24 +103,24 @@ test.describe("API /cars", () => {
     });
 
     test("should return user cars", async ({ clientWithNewUser }) => {
-      await clientWithNewUser.cars.createCar(validCarData);
+      await clientWithNewUser.cars.createCar(carModel);
 
       const response = await clientWithNewUser.cars.getUserCars();
 
       expect(response.status).toEqual(200);
       expect(response.data.status).toEqual("ok");
       expect(response.data.data).toHaveLength(1);
-      expect(response.data.data[0]).toMatchObject(validCarData);
+      expect(response.data.data[0]).toEqual(expectedBody);
     });
 
     test("should return user car by id", async ({ clientWithNewUser }) => {
-      const res = await clientWithNewUser.cars.createCar(validCarData);
+      const res = await clientWithNewUser.cars.createCar(carModel);
       const carId = res.data.data.id as number;
       const response = await clientWithNewUser.cars.getCarById(carId);
 
       expect(response.status).toEqual(200);
       expect(response.data.status).toEqual("ok");
-      expect(response.data.data).toMatchObject(validCarData);
+      expect(response.data.data).toEqual(expectedBody);
     });
 
     test("should return error for user car by id", async ({
@@ -127,7 +136,7 @@ test.describe("API /cars", () => {
     });
 
     test("should update car", async ({ clientWithNewUser }) => {
-      const res = await clientWithNewUser.cars.createCar(validCarData);
+      const res = await clientWithNewUser.cars.createCar(carModel);
       const carId = res.data.data.id as number;
       const mileage = 444;
       const response = await clientWithNewUser.cars.updateCarsById(carId, {
@@ -136,13 +145,13 @@ test.describe("API /cars", () => {
 
       expect(response.status).toEqual(200);
       expect(response.data.status).toEqual("ok");
-      expect(response.data.data).toMatchObject({ ...validCarData, mileage });
+      expect(response.data.data).toEqual({ ...expectedBody, mileage });
     });
 
     test("should return error for update car", async ({
       clientWithNewUser,
     }) => {
-      const res = await clientWithNewUser.cars.createCar(validCarData);
+      const res = await clientWithNewUser.cars.createCar(carModel);
       const carId = res.data.data.id as number;
       const mileage = "wow";
       const response = await clientWithNewUser.cars.updateCarsById(carId, {
@@ -157,7 +166,7 @@ test.describe("API /cars", () => {
     });
 
     test("should delete car", async ({ clientWithNewUser }) => {
-      const res = await clientWithNewUser.cars.createCar(validCarData);
+      const res = await clientWithNewUser.cars.createCar(carModel);
       const carId = res.data.data.id as number;
       const response = await clientWithNewUser.cars.deleteCarById(carId);
 

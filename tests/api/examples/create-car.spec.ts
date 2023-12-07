@@ -7,7 +7,7 @@ import {
 } from "../../../src/data/dict";
 import { CreateCarModel } from "../../../src/models";
 
-test.describe("Cars", () => {
+test.describe.skip("Cars", () => {
   let client: APIClient;
 
   test.beforeAll(async () => {
@@ -41,7 +41,7 @@ test.describe("Cars", () => {
       carCreatedAt: expect.any(String),
       updatedMileageAt: expect.any(String),
       brand: brand?.title,
-      model: model.title,
+      model: model?.title,
       logo: brand?.logoFilename,
     };
     expect(response.data.data, "Returned car object should ba valid").toEqual(

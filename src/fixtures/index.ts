@@ -103,10 +103,8 @@ export const test = base.extend<Fixtures>({
       password: "Qwerty12345",
     };
 
-    const apiClient = new APIClient();
-
-    await apiClient.auth.signUp(data);
-    await apiClient.auth.signIn({
+    await new APIClient().auth.signUp(data);
+    const apiClient = await APIClient.authenticate({
       email: data.email,
       password: data.password,
     });
