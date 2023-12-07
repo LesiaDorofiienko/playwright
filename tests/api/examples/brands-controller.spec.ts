@@ -19,7 +19,9 @@ test.describe.skip("API", () => {
   test("should return user's cars", async () => {
     const response = await client.cars.getUserCars();
     expect(response.status, "Status code should be 200").toEqual(200);
-    // expect(response.data, "Valid brands should be returned").toEqual(VALID_BRANDS_RESPONSE_BODY)
+    expect(response.data, "Valid brands should be returned").toEqual(
+      VALID_BRANDS_RESPONSE_BODY
+    );
   });
 
   for (const brand of VALID_BRANDS_RESPONSE_BODY.data) {

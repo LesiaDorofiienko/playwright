@@ -21,7 +21,7 @@ export type Fixtures = {
   pageWithAuth: Page;
   userAPIClient: APIRequestContext;
   client: APIClient;
-  clientWithUser: (userData: any) => Promise<APIClient>;
+  clientWithUser: (userData: SignInData) => Promise<APIClient>;
   clientWithNewUser: APIClient;
 };
 
