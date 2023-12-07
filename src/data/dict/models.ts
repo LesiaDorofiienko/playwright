@@ -139,7 +139,7 @@ export const VALID_BRAND_MODELS = {
       },
     ],
   },
-};
+} as const;
 
 export const VALID_MODELS_RESPONSE = {
   status: "ok",
@@ -168,4 +168,4 @@ export const VALID_MODELS_RESPONSE = {
     { id: 22, carBrandId: 5, title: "Punto" },
     { id: 23, carBrandId: 5, title: "Scudo" },
   ],
-};
+} as const;

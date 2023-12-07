@@ -27,4 +27,4 @@ export const VALID_BRANDS_RESPONSE_BODY = {
       logoFilename: "fiat.png",
     },
   ],
-};
+} as const;

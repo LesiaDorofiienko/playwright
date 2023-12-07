@@ -5,11 +5,16 @@ import { ControllerOptions } from "../types";
 export class UserController extends BaseController {
   private readonly deleteUserPath = "/users";
 
-  constructor(options: ControllerOptions) {
+  private readonly userProfilePath = "/users/profile";
+  constructor(options?: ControllerOptions) {
     super(options);
   }
 
-  async deleteCurrentUser() {
+  getUserProfileInfo() {
+    return this.client.get(this.userProfilePath);
+  }
+
+  deleteCurrentUser() {
     return this.client.delete(this.deleteUserPath);
   }
 }

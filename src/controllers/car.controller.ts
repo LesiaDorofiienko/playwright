@@ -18,7 +18,7 @@ export class CarController extends BaseController {
   private readonly updateCarBydIdPath = "/cars/{id}";
   private readonly deleteCarIdPath = "/cars/{id}";
 
-  constructor(options: ControllerOptions) {
+  constructor(options?: ControllerOptions) {
     super(options);
   }
 
