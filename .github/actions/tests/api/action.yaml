@@ -27,9 +27,11 @@ runs:
         node-version: 18
 
     - name: "Install dependencies"
+      shell: bash
       run: npm ci
 
     - name: "Run tests"
+      shell: bash
       run: |
         npx playwright test
       env:
@@ -39,6 +41,7 @@ runs:
 
     - name: "Fix permissions"
       if: ${{ always() }}
+      shell: bash
       run: |
         chmod -c -R +rwX "_site/" | while read line; do
           echo "::warning title=Invalid file permissions automatically fixed::$line"
