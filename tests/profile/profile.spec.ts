@@ -18,7 +18,7 @@ test.describe("User profile", () => {
     await gp.navigate();
   });
 
-  test.only("frontend should use data returned in API res", async ({
+  test("frontend should use data returned in API res", async ({
     userProfilePage,
   }) => {
     const { page } = userProfilePage;
